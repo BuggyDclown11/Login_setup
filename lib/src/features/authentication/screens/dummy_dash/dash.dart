@@ -145,16 +145,19 @@ class _DashState extends State<Dash> {
 
   void animateToStartOfRoute() {
     if (polyCoordinates.isNotEmpty) {
-      myMapController?.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: polyCoordinates.first,
-            zoom: cameraZoom,
-            bearing: cameraBearing,
-            tilt: cameraTilt,
+      if (myMapController != null && polyCoordinates.isNotEmpty) {
+        myMapController!.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target:
+                  polyCoordinates[0], // Use the first point in polyCoordinates
+              zoom: cameraZoom,
+              bearing: cameraBearing,
+              tilt: cameraTilt,
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -411,6 +414,11 @@ class _DashState extends State<Dash> {
             minChildSize: 0.03, // Minimum size of the bottom sheet
             maxChildSize: 0.3, // Maximum size of the bottom sheet
             builder: (context, scrollController) {
+              if (polyCoordinates.isEmpty ||
+                  currentLocation == null ||
+                  targetLocation == null) {
+                return CircularProgressIndicator(); // Placeholder or loading state
+              }
               String destinationName =
                   Dest.isNotEmpty ? widget.placeInfo.name : targetLocationName;
               return Container(

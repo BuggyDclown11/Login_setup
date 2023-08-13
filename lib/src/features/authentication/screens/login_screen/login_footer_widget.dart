@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:login_setup/src/features/authentication/controllers/login_controller.dart';
-import 'package:login_setup/src/features/authentication/screens/dashboard/dashboard.dart';
+
 import 'package:login_setup/src/features/authentication/screens/signup_screen/signup-screen.dart';
-import 'package:login_setup/src/utils/helper/helper.dart';
+
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 

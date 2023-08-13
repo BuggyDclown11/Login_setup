@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login_setup/src/features/authentication/controllers/login_controller.dart';
+
 import 'package:login_setup/src/features/authentication/controllers/signup_controller.dart';
 import 'package:login_setup/src/features/authentication/screens/forgot_password/forget_password_options/forget_password_model_bottom_sheet.dart';
 
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
-import '../../controllers/signup_controller.dart';
+
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);

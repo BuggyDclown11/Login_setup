@@ -1,6 +1,6 @@
 const String tAppName = '.appable/';
 const String tAppTagLine = "Learn To Code.\nFree for Everyone";
-const String tWelcomeTitle = "WElcome toCulutural city Bhaktapur.!";
+const String tWelcomeTitle = "Welcome to Cultural city Bhaktapur.!";
 
 const String tWelcomeSubtitle =
     "Unleash the adventurer inside  of you and find the best kept secrets of Bhaktapur";

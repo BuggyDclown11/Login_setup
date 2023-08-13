@@ -16,7 +16,7 @@ class RecommendedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final txtTheme = Theme.of(context).textTheme;
+
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     print(placeInfo.name);
     return InkWell(
@@ -42,13 +42,13 @@ class RecommendedCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage(placeInfo.imageUrl!))),
+                          image: NetworkImage(placeInfo.imageUrl))),
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Text(
-                  placeInfo.name!,
+                  placeInfo.name,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 SizedBox(
@@ -61,7 +61,7 @@ class RecommendedCard extends StatelessWidget {
                       color: tPrimaryClr,
                     ),
                     Text(
-                      placeInfo.address!,
+                      placeInfo.address,
                       style: TextStyle(color: Colors.grey, fontSize: 15),
                     )
                   ],

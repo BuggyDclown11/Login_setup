@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:login_setup/src/features/authentication/screens/welcome/welcome_screen.dart';
+import 'package:login_setup/src/features/authentication/screens/welcome_scr/welcome_screen.dart';
 
 class SplashScreenController extends GetxController {
   static SplashScreenController get find => Get.find();

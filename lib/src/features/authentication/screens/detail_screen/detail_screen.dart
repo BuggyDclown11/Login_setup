@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:login_setup/src/constants/constant.dart';
+
 import 'package:login_setup/src/features/authentication/screens/dummy_dash/dash.dart';
-import 'package:login_setup/src/features/authentication/screens/map_screen/map_screen.dart';
+
 import '../../../../common_widgets/cards/recommended_card.dart';
 import '../../../../constants/colors.dart';
 import '../../models/place_modal.dart';
@@ -21,8 +21,8 @@ class _DetailScreenState extends State<DetailScreen> {
   List<bool> starStatus = [false, false, false, false, false];
   TextEditingController _commentController = TextEditingController();
 
-  final String apiUrl1 = "http://192.168.1.65/api/insert_TempleRatings.php";
-  final String Url = "http://192.168.1.65/api/insert_fav.php";
+  final String apiUrl1 = "http:// 172.20.10.2/api/insert_TempleRatings.php";
+  final String Url = "http:// 172.20.10.2/api/insert_fav.php";
 
   late int templeid;
   late String Username;
@@ -36,7 +36,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   void fetchRecommendations() async {
     // if (title == 'temple') {
-    var url = 'http://192.168.1.65:5000/predict';
+    var url = 'http:// 172.20.10.2:5000/predict';
     var body = jsonEncode({'user_id': currentuser});
 
     var response = await http.post(
@@ -74,56 +74,13 @@ class _DetailScreenState extends State<DetailScreen> {
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
-    //  // }
-    //    else if (title == 'pond') {
-    //     var url = 'http://192.168.1.65:5000/predict';
-    //     var body = jsonEncode({'user_id': currentuser});
-
-    //     var response = await http.post(
-    //       Uri.parse(url),
-    //       headers: {'Content-Type': 'application/json'},
-    //       body: body,
-    //     );
-
-    //     if (response.statusCode == 200) {
-    //       var data = jsonDecode(response.body);
-    //       print('Recommendations data: $data');
-
-    //       List<int> recommendationIds = List<int>.from(data);
-    //       print('Number of recommendations: ${recommendationIds.length}');
-
-    //       List<PlaceInfo> recommendedPonds = [];
-
-    //       // Initialize the PlacesService class
-    //       PlacesService placesService = PlacesService();
-
-    //       // Fetch all temples from the API
-    //       List<PlaceInfo> temples = await placesService.getPonds();
-
-    //       for (int id in recommendationIds) {
-    //         PlaceInfo pond = temples.firstWhere((ponds) => ponds.id == (id + 1));
-    //         if (pond != null) {
-    //           recommendedPonds.add(pond);
-    //         }
-    //       }
-
-    //       setState(() {
-    //         recommendations = recommendedPonds;
-    //       });
-    //     } else {
-    //       print('Request failed with status: ${response.statusCode}.');
-    //     }
-    //   }
   }
 
   Future<void> checkFavoriteStatus() async {
-    // Perform the necessary check to determine if the place is in favorites
     final String uid = currentuser;
-    // final response = await http.get(Uri.parse(
-    //     "http://192.168.1.65/api/show_favTemple.php?uid=$uid&templeid=$templeid"));
 
     final response = await http
-        .post(Uri.parse("http://192.168.1.65/api/show_favTemple.php"), body: {
+        .post(Uri.parse("http:// 172.20.10.2/api/show_favTemple.php"), body: {
       'templeid': templeid.toString(),
       'uid': uid.toString(),
     });
@@ -146,7 +103,7 @@ class _DetailScreenState extends State<DetailScreen> {
     print(comment);
     final String uiid = currentuser;
     final response = await http.post(
-        Uri.parse("http://192.168.1.65/api/insert_rating.php?title=$title"),
+        Uri.parse("http:// 172.20.10.2/api/insert_rating.php?title=$title"),
         body: {
           'rating': rating.toString(),
           'templeid': templeid.toString(),
@@ -167,7 +124,7 @@ class _DetailScreenState extends State<DetailScreen> {
     print('this');
     final String uiid = currentuser;
     final response = await http.post(
-        Uri.parse("http://192.168.1.65/api/insert_fav.php?title=$title"),
+        Uri.parse("http:// 172.20.10.2/api/insert_fav.php?title=$title"),
         body: {
           'uid': uiid.toString(),
           'templeid': templeid.toString(),
@@ -188,7 +145,7 @@ class _DetailScreenState extends State<DetailScreen> {
     final String uid = currentuser;
 
     final response = await http.post(
-      Uri.parse("http://192.168.1.65/api/remove_fav.php"),
+      Uri.parse("http:// 172.20.10.2/api/remove_fav.php"),
       body: {
         'templeid': templeid.toString(),
         'uid': uid,
@@ -210,9 +167,9 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   void initState() {
     super.initState();
-    templeid = widget.placeInfo.id!;
+    templeid = widget.placeInfo.id;
     currentuser = FirebaseAuth.instance.currentUser!.uid;
-    title = widget.placeInfo.title!;
+    title = widget.placeInfo.title;
     checkFavoriteStatus();
     fetchRecommendations();
   }
@@ -226,7 +183,7 @@ class _DetailScreenState extends State<DetailScreen> {
         backgroundColor: tWhiteClr,
         body: Stack(
           children: [
-            Image.network(widget.placeInfo.imageUrl!,
+            Image.network(widget.placeInfo.imageUrl,
                 width: double.infinity,
                 fit: BoxFit.cover,
                 height: MediaQuery.of(context).size.height * 0.5),
@@ -326,7 +283,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               ),
                             ),
                             Text(
-                              widget.placeInfo.name!,
+                              widget.placeInfo.name,
                               style: TextStyle(
                                   color: isDark ? tPrimaryClr : tSecondaryClr,
                                   fontSize: 26,
@@ -344,7 +301,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 SizedBox(
                                   width: 12,
                                 ),
-                                Text(widget.placeInfo.address!,
+                                Text(widget.placeInfo.address,
                                     style: TextStyle(
                                       color: Colors.grey,
                                       fontSize: 20,
@@ -368,6 +325,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
+                                  // ignore: deprecated_member_use
                                   primary: Colors
                                       .indigo, // Set the button's background color
                                   onPrimary: Colors
@@ -413,7 +371,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text(widget.placeInfo.desc!,
+                            Text(widget.placeInfo.desc,
                                 style: TextStyle(
                                   color: Colors.grey,
                                   fontSize: 18,
@@ -425,61 +383,104 @@ class _DetailScreenState extends State<DetailScreen> {
                             SizedBox(
                               height: 10,
                             ),
+                            SizedBox(height: 20),
+                           
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("city",
-                                    style: TextStyle(
-                                      color:
-                                          isDark ? tPrimaryClr : tSecondaryClr,
-                                      fontSize: 20,
-                                    )),
-                                SizedBox(
-                                  width: 12,
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
+                                  decoration: BoxDecoration(
+                                    color: isDark
+                                        ? Colors.grey[800]
+                                        : Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 8,
+                                        spreadRadius: 2,
+                                        offset: Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "City",
+                                        style: TextStyle(
+                                          color: isDark
+                                              ? tPrimaryClr
+                                              : tSecondaryClr,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        "${widget.placeInfo.city}",
+                                        style: TextStyle(
+                                          color: isDark
+                                              ? Colors.grey
+                                              : tSecondaryClr,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Expanded(
-                                  child: Text("${widget.placeInfo.city} city",
-                                      style: TextStyle(
-                                        color: isDark
-                                            ? Colors.grey
-                                            : tSecondaryClr,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      )),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
+                                  decoration: BoxDecoration(
+                                    color: isDark
+                                        ? Colors.grey[800]
+                                        : Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 8,
+                                        spreadRadius: 2,
+                                        offset: Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Deity",
+                                        style: TextStyle(
+                                          color: isDark
+                                              ? tPrimaryClr
+                                              : tSecondaryClr,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        "${widget.placeInfo.city} god",
+                                        style: TextStyle(
+                                          color: isDark
+                                              ? Colors.grey
+                                              : tSecondaryClr,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              children: [
-                                Text("Deity",
-                                    style: TextStyle(
-                                      color:
-                                          isDark ? tPrimaryClr : tSecondaryClr,
-                                      fontSize: 20,
-                                    )),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                Expanded(
-                                  child: Text("${widget.placeInfo.city} god",
-                                      style: TextStyle(
-                                        color: isDark
-                                            ? Colors.grey
-                                            : tSecondaryClr,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      )),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
+                            SizedBox(height: 20),
                             Text(
                               "Give your reviews",
                               style: TextStyle(
@@ -495,7 +496,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               children: [
                                 Text(
                                   "Recommendation",
-                                  style: txtTheme.headlineMedium,
+                                  style: txtTheme.headlineSmall,
                                 ),
                               ],
                             ),

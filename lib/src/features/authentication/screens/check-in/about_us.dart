@@ -1,18 +1,8 @@
-import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:login_setup/src/constants/constant.dart';
-import 'package:login_setup/src/features/authentication/screens/dummy_dash/dash.dart';
-import 'package:login_setup/src/features/authentication/screens/map_screen/map_screen.dart';
 
-import '../../../../common_widgets/cards/category_card.dart';
-import '../../../../common_widgets/cards/recommended_card.dart';
 import '../../../../constants/colors.dart';
-import '../../models/place_modal.dart';
-import 'package:http/http.dart' as http;
 
-import '../detail_screen/detail_screen.dart';
 
 class About extends StatefulWidget {
   const About({Key? key}) : super(key: key);

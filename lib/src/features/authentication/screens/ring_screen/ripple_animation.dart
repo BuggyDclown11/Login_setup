@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-//import 'locationdisplay.dart';
-import 'ring_painter.dart';
-import 'test.dart';
+import 'package:login_setup/src/features/authentication/screens/ring_screen/ring_painter.dart';
+import 'package:login_setup/src/features/authentication/screens/ring_screen/test.dart';
 
 
 class RingsWidget extends StatefulWidget {
+  final String selectedTitle;
+
+  RingsWidget({required this.selectedTitle});
+
   @override
   _RingsWidgetState createState() => _RingsWidgetState();
 }
 
 class _RingsWidgetState extends State<RingsWidget>
     with SingleTickerProviderStateMixin {
-      
-      final double cSizeX=600;
-      final double cSizeY=600;
-      
+  final double cSizeX = 600;
+  final double cSizeY = 600;
+
   AnimationController? _animationController;
   Animation<double>? _animation;
 
@@ -39,6 +41,7 @@ class _RingsWidgetState extends State<RingsWidget>
 
   @override
   Widget build(BuildContext context) {
+      print("Selected Title in rings widget: ${widget.selectedTitle}"); 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -48,28 +51,29 @@ class _RingsWidgetState extends State<RingsWidget>
           child: Stack(
             children: [
               Positioned.fill(
-                child:AnimatedBuilder(
-              animation: _animation!,
-              builder: (BuildContext context, Widget? child) {
-                return CustomPaint(
-                  painter: RingsPainter(
-                    animationValue: _animation!.value,
-                  ),
-                );
-              },
-            ),),
-            Positioned.fill(
-              child:PositionDifference1(cSizeY:cSizeY, cSizeX: cSizeX,),
-              
-            ),
-
-             ],
+                child: AnimatedBuilder(
+                  animation: _animation!,
+                  builder: (BuildContext context, Widget? child) {
+                    return CustomPaint(
+                      painter: RingsPainter(
+                        animationValue: _animation!.value,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Positioned.fill(
+                child: PositionDifference1(
+                  cSizeY: cSizeY,
+                  cSizeX: cSizeX,
+                  selectedTitle: widget.selectedTitle,
+                )
+              ,
+              ),
+            ],
           ),
         ),
       ],
     );
   }
 }
-
-
-  

@@ -15,7 +15,7 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final txtTheme = Theme.of(context).textTheme;
+    
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
 
     return Padding(

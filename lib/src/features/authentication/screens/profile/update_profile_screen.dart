@@ -9,6 +9,8 @@ import 'package:login_setup/src/features/authentication/controllers/profile_cont
 import 'package:login_setup/src/features/authentication/models/user_model.dart';
 import 'package:login_setup/src/features/authentication/screens/profile/profile_screen.dart';
 
+import '../../../../constants/constants.dart';
+
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({Key? key}) : super(key: key);
 
@@ -221,7 +223,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             await controller.updateRecord(user);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: tPrimaryClr,
+                            backgroundColor: AppColors.kPrimary,
                             side: BorderSide.none,
                             shape: StadiumBorder(),
                           ),

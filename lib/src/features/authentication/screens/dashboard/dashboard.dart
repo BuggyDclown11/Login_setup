@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:login_setup/src/common_widgets/cards/category_card.dart';
 import 'package:login_setup/src/common_widgets/cards/recommended_card.dart';
 import 'package:login_setup/src/common_widgets/cards/recommened/recommended_for_event.dart';
@@ -12,7 +12,7 @@ import 'package:login_setup/src/features/authentication/screens/dashboard/widget
 import 'package:login_setup/src/features/authentication/screens/detail_screen/detail_screen.dart';
 import 'package:login_setup/src/features/authentication/screens/favourite/favorite.dart';
 import 'package:login_setup/src/features/authentication/screens/profile/profile_screen.dart';
-import 'package:login_setup/src/repository/authentication_repository/authentication_repository.dart';
+
 import 'package:http/io_client.dart';
 import 'dart:io';
 import '../detail_screen/details_for_event.dart';
@@ -39,9 +39,50 @@ class _DashboardState extends State<Dashboard> {
   String searchText = '';
   List<PlaceInfo> recommendedRestaurants = [];
 
+  void fetchRecommendations() async {
+    // if (title == 'temple') {
+    var url = 'http://192.168.1.65:5000/predict';
+    var body = jsonEncode({'user_id': currentuser});
+
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print('Recommendations data: $data');
+
+      List<int> recommendationIds = List<int>.from(data);
+      print('Number of recommendations: ${recommendationIds.length}');
+
+      List<PlaceInfo> recommendedTemples = [];
+
+      // Initialize the PlacesService class
+      PlacesService placesService = PlacesService();
+
+      // Fetch all temples from the API
+      List<PlaceInfo> temples = await placesService.getTemples();
+
+      for (int id in recommendationIds) {
+        PlaceInfo temple =
+            temples.firstWhere((temples) => temples.id == (id + 1));
+        if (temple != null) {
+          recommendedTemples.add(temple);
+        }
+      }
+
+      setState(() {
+        recommendations = recommendedTemples;
+      });
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     settemples();
     setAllEvents();
@@ -295,7 +336,7 @@ class _DashboardState extends State<Dashboard> {
               ),
               Text(
                 "Explore new destination",
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
               SizedBox(
                 height: 20,
@@ -311,7 +352,7 @@ class _DashboardState extends State<Dashboard> {
               ),
               Row(
                 children: [
-                  Text("Popular Destinations", style: txtTheme.headlineMedium),
+                  Text("Popular Destinations", style: txtTheme.headlineSmall),
                 ],
               ),
               SizedBox(
@@ -438,7 +479,7 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   Text(
                     "Events",
-                    style: txtTheme.headlineMedium,
+                    style: txtTheme.headlineSmall,
                   ),
                 ],
               ),
@@ -537,6 +578,46 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
               SizedBox(height: 10),
+              Row(
+                children: [
+                  Text(
+                    "Recommendation",
+                    style: txtTheme.headlineSmall,
+                  ),
+                ],
+              ),
+              Container(
+                height: 300,
+                child: ListView.builder(
+                  itemCount: recommendations.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 5, right: 15),
+                      child: Expanded(
+                        child: Row(
+                          children: [
+                            RecommendedCard(
+                              placeInfo: recommendations[index],
+                              press: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailScreen(
+                                      placeInfo: recommendations[index],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: 10)
             ],
           ),
         ),
@@ -585,14 +666,14 @@ class _DashboardState extends State<Dashboard> {
                       color: isDark ? tCardBgClr : tDarkClr,
                     ),
                     title: Text(
-                      data[index].name!,
+                      data[index].name,
                       style: TextStyle(
                         fontSize: 14,
                         color: isDark ? tCardBgClr : tDarkClr,
                       ),
                     ),
                     subtitle: Text(
-                      data[index].address!,
+                      data[index].address,
                       style: TextStyle(
                         fontSize: 12,
                         color: isDark ? tCardBgClr : tDarkClr,
@@ -629,38 +710,37 @@ class _DashboardState extends State<Dashboard> {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          child: Column(
+          child: Row(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      style: TextStyle(
-                        color: isDark ? tPrimaryClr : tDarkClr,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: "Search your destination",
-                        prefixIcon: Icon(Icons.search),
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          searchText = value;
-                        });
-                        searchDestination(value);
-                      },
-                    ),
+              Expanded(
+                child: TextFormField(
+                  style: TextStyle(
+                    color: isDark ? tPrimaryClr : tDarkClr,
                   ),
-                  CircleAvatar(
-                    radius: 22,
-                    backgroundColor: tPrimaryClr,
-                    child: Icon(
-                      Icons.sort_by_alpha_sharp,
-                      color: tWhiteClr,
-                    ),
+                  decoration: InputDecoration(
+                    hintText: "Search your destination",
+                    prefixIcon: Icon(Icons.search,
+                        color: isDark ? tPrimaryClr : tDarkClr),
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    fillColor: isDark ? tSecondaryClr : tWhiteClr,
+                    filled: true,
                   ),
-                ],
+                  onChanged: (value) {
+                    setState(() {
+                      searchText = value;
+                    });
+                    searchDestination(value);
+                  },
+                ),
+              ),
+              CircleAvatar(
+                radius: 22,
+                backgroundColor: tPrimaryClr,
+                child: Icon(
+                  Icons.sort_by_alpha_sharp,
+                  color: tWhiteClr,
+                ),
               ),
             ],
           ),

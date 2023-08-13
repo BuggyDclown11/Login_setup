@@ -5,7 +5,8 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:login_setup/src/features/authentication/screens/dashboard/dashboard.dart';
 import 'package:login_setup/src/features/authentication/screens/login_screen/login_screen.dart';
-import 'package:login_setup/src/features/authentication/screens/welcome/welcome_screen.dart';
+import 'package:login_setup/src/features/authentication/screens/splash/splash_view.dart';
+import 'package:login_setup/src/features/authentication/screens/welcome_scr/welcome_screen.dart';
 import 'package:login_setup/src/repository/authentication_repository/exceptions/signup_email_password_failure.dart';
 import 'package:login_setup/src/repository/authentication_repository/exceptions/t_exception.dart';
 
@@ -27,9 +28,14 @@ class AuthenticationRepository extends GetxController {
   }
 
   _setInitialScreen(User? user) {
-    user == null
-        ? Get.offAll(() => const WelcomeScreen())
-        : Get.offAll(() => Dashboard());
+    print('user from authentication repo: $user');
+    if (user != null) {
+      print('User is logged in. Navigating to Dashboard.');
+      Get.offAll(() => Dashboard());
+    } else {
+      print('User is not logged in. Navigating to SplashView.');
+      Get.offAll(() => const SplashView());
+    }
   }
 
   void phoneAuthentication(String phoneNo) async {

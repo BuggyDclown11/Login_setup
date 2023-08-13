@@ -1,18 +1,7 @@
-import 'dart:convert';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:login_setup/src/constants/constant.dart';
-import 'package:login_setup/src/features/authentication/screens/dummy_dash/dash.dart';
-import 'package:login_setup/src/features/authentication/screens/map_screen/map_screen.dart';
 
-import '../../../../common_widgets/cards/category_card.dart';
-import '../../../../common_widgets/cards/recommended_card.dart';
 import '../../../../constants/colors.dart';
-import '../../models/place_modal.dart';
-import 'package:http/http.dart' as http;
-
-import '../detail_screen/detail_screen.dart';
+import '../../models/user_log_model.dart';
 
 class CheckIn extends StatefulWidget {
   const CheckIn({Key? key}) : super(key: key);
@@ -22,9 +11,19 @@ class CheckIn extends StatefulWidget {
 }
 
 class _CheckInState extends State<CheckIn> {
+  static List<UserLog> places = [];
+
   @override
   void initState() {
     super.initState();
+    setUserLog();
+  }
+
+  void setUserLog() async {
+    List<UserLog> uuserLog = await UserLogService().getUserLog();
+    setState(() {
+      places = uuserLog;
+    });
   }
 
   @override
@@ -33,11 +32,11 @@ class _CheckInState extends State<CheckIn> {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
 
     return Scaffold(
-        backgroundColor: tRouteColor,
-        body: Stack(
-          children: [
-            SafeArea(
-                child: Column(
+      backgroundColor: tRouteColor,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -53,14 +52,12 @@ class _CheckInState extends State<CheckIn> {
                             height: 40,
                             width: 40,
                             decoration: BoxDecoration(
-                              color: Colors
-                                  .purple, // Set the background color to purple
+                              color: Colors.purple,
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
                               Icons.arrow_back,
-                              color: Colors
-                                  .white, // Set the color of the arrow to white
+                              color: Colors.white,
                               size: 20,
                             ),
                           ),
@@ -70,23 +67,22 @@ class _CheckInState extends State<CheckIn> {
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
-                            "User's check-in",
-                            style: txtTheme.headlineMedium,
+                            "Traveller's log",
+                            style: txtTheme.headlineSmall,
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-
-                ///
                 SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                 Expanded(
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                        color: isDark ? tSecondaryClr : tWhiteClr,
-                        borderRadius: BorderRadius.circular(30)),
+                      color: isDark ? tSecondaryClr : tWhiteClr,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 20),
@@ -96,21 +92,54 @@ class _CheckInState extends State<CheckIn> {
                           children: [
                             Container(
                               child: Center(
-                                child: Text("Places",
-                                    style: txtTheme.headlineMedium),
+                                child: Text("Recently visited locations",
+                                    style: txtTheme.headlineSmall),
                               ),
                             ),
-                            Container(height: 1,
-                            color: Colors.grey,)
+                            Container(
+                              height: 1,
+                              color: Colors.grey,
+                            ),
+                            // Loop through the fetched places and display details for each
+                            for (var userLog in places)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "Time: ${userLog.time}",
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "Location: ${userLog.locName}",
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "Latitude: ${userLog.latitude}",
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "Longitude: ${userLog.longitude}",
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Divider(color: Colors.grey),
+                                ],
+                              ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                )
+                ),
               ],
-            ))
-          ],
-        ));
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

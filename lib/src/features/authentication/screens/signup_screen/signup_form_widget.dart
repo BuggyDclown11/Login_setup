@@ -116,17 +116,7 @@ class SignUpFormWidget extends StatelessWidget {
                   child: ElevatedButton(
                       onPressed: () {
                         if (!_formKey.currentState!.validate()) {
-                          /****Email&Passord Authentication */
-                          // SignUpController.instance.registerUser(
-                          //     controller.email.text.trim(),
-                          //     controller.password.text.trim());
-
-/***For Phone Authentication */
-                          //   SignUpController.instance.phoneAuthentication(
-                          //       controller.phoneNo.text.trim());
-                          //   Get.to(() => const OtpScreen());
-
-                          //Get User and Pass it to Controller
+                      
                           return;
                         } else {
                           final user = UserModel(
