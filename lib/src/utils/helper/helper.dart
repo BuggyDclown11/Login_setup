@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:get/get.dart';
 import 'package:login_setup/src/features/authentication/screens/dashboard/dashboard.dart';
-import 'package:login_setup/src/features/authentication/screens/signup_screen/signup-screen.dart';
 
 Future<void> _handleSignIn() async {
   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();

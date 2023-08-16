@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:login_setup/src/features/authentication/screens/dashboard/dashboard.dart';
-import 'package:login_setup/src/features/authentication/screens/login_screen/login_screen.dart';
 import 'package:login_setup/src/features/authentication/screens/splash/splash_view.dart';
-import 'package:login_setup/src/features/authentication/screens/welcome_scr/welcome_screen.dart';
+
 import 'package:login_setup/src/repository/authentication_repository/exceptions/signup_email_password_failure.dart';
 import 'package:login_setup/src/repository/authentication_repository/exceptions/t_exception.dart';
 
-import '../../features/authentication/screens/forgot_password/forget_password_otp/otp_screen.dart';
+import '../../features/authentication/screens/auth/signin_view.dart';
+import '../../features/authentication/screens/welcome copy/welcome_view.dart';
 
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
@@ -124,7 +124,7 @@ class AuthenticationRepository extends GetxController {
 
       _firebaseUser.value != null
           ? Get.offAll(() => Dashboard())
-          : Get.offAll(() => WelcomeScreen());
+          : Get.offAll(() => WelcomeView());
     } on FirebaseAuthException catch (e) {
       final ex = SignUpWithEmailPasswordFailure.code(e.code);
       Get.snackbar('Error', 'FIREBASE AUTH EXCEPTION - ${ex.message}',
@@ -143,7 +143,7 @@ class AuthenticationRepository extends GetxController {
     try {
       await GoogleSignIn().signOut();
       await FirebaseAuth.instance.signOut();
-      Get.offAll(() => const LoginScreen());
+      Get.offAll(() => const SignInView());
     } on FirebaseAuthException catch (e) {
       throw e.message!;
     } on FormatException catch (e) {
