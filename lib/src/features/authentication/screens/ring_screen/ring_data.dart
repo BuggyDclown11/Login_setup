@@ -34,8 +34,15 @@ class _RingsPageState extends State<RingsPage> {
       appBar: AppBar(
         title: Text('Rings'),
       ),
-      body: Center(
-        child: RingsWidget(selectedTitle: Title),
+      body: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: RingsWidget(selectedTitle: Title),
+          ),
+        ],
       ),
       floatingActionButton: FabCircularMenu(
         alignment: Alignment.bottomLeft,

@@ -78,15 +78,14 @@ class _ScannerState extends State<Scanner> {
       String uid = currentuser;
       String locName = locationName;
 
-      final response = await http.post(
-          Uri.parse("http://192.168.1.65/api/insert_user_log.php"),
-          body: {
-            'latitude': latitude.toString(),
-            'uid': uid.toString(),
-            'longitude': longitude.toString(),
-            'time': time.toString(),
-            'locName': locName
-          });
+      final response = await http
+          .post(Uri.parse("http://172.20.10.2/api/insert_user_log.php"), body: {
+        'latitude': latitude.toString(),
+        'uid': uid.toString(),
+        'longitude': longitude.toString(),
+        'time': time.toString(),
+        'locName': locName
+      });
 
       if (response.statusCode == 200) {
         // Successful insertion

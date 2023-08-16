@@ -21,14 +21,22 @@ class AuthenticationRepository extends GetxController {
 
   User? get firebaseUser => _firebaseUser.value;
   @override
-  void onReady() {
+  @override
+  void onReady() async {
     _firebaseUser = Rx<User?>(_auth.currentUser);
     _firebaseUser.bindStream(_auth.userChanges());
+
+    // Delay the navigation to allow time for the stream to emit initial value
+    await Future.delayed(Duration(seconds: 1));
+
+    _setInitialScreen(_firebaseUser.value);
     ever(_firebaseUser, _setInitialScreen);
   }
 
-  _setInitialScreen(User? user) {
+  Future<void> _setInitialScreen(User? user) async {
     print('user from authentication repo: $user');
+    await Future.delayed(Duration(seconds: 1)); // Add a short delay
+
     if (user != null) {
       print('User is logged in. Navigating to Dashboard.');
       Get.offAll(() => Dashboard());

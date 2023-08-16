@@ -16,7 +16,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
       .then((value) => Get.put(AuthenticationRepository()));
   runApp(ProviderScope(child: MyApp()));
-  OTPController();
+
 }
 
 class MyApp extends StatelessWidget {
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
             FocusManager.instance.primaryFocus?.unfocus();
           },
           child: GetMaterialApp(
-            title: 'Ngamar',
+            title: 'Roamify',
             debugShowCheckedModeBanner: false,
             scrollBehavior: const ScrollBehavior().copyWith(overscroll: false),
             defaultTransition: Transition.fadeIn,

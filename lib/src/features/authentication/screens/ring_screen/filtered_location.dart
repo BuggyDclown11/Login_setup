@@ -26,7 +26,7 @@ class LocationScreen {
   //late String title = placeInfo.title!;
   late final String url;
   late final String title;
-  late double searchRadius;
+  late double radiusValue = 100.0;
   static List<FilteredLocation> locations = [];
 
   LocationScreen({required this.title});
@@ -37,8 +37,18 @@ class LocationScreen {
   Future<void> fetchLocationsFromAPI(double radius) async {
     print('new radiussssss: $radius');
     print('called func');
+
+    Position userPosition = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    double userLatitude = userPosition.latitude;
+    double userLongitude = userPosition.longitude;
+    print(userLatitude);
+    print(userLongitude);
+
     if (title == 'temple') {
-      url = 'http:// 172.20.10.2/api/show_temple.php';
+      url = 'http://192.168.34.137/api/show_temple.php';
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
@@ -49,6 +59,12 @@ class LocationScreen {
           return FilteredLocation(
             latitude: double.parse(item['Latitude']),
             longitude: double.parse(item['Longitude']),
+            // distance: calculateDistance(
+            //   userLatitude,
+            //   userLongitude,
+            //   double.parse(item['Latitude']),
+            //   double.parse(item['Longitude']),
+            // ),
             distance: calculateDistance(double.parse(item['Latitude']),
                 double.parse(item['Longitude'])),
             name: item['Name'],
@@ -56,7 +72,10 @@ class LocationScreen {
             title: '',
           );
         }).toList();
-        //print(fetchedLocations);
+
+        // Update the value of radius before filtering the locations
+        this.radiusValue = radius;
+
         List<FilteredLocation> filteredLocations =
             await filterLocationsByRadius(fetchedLocations, radius);
 
@@ -68,6 +87,22 @@ class LocationScreen {
     }
   }
 
+  // double calculateDistance(
+  //   double userLatitude,
+  //   double userLongitude,
+  //   double locationLatitude,
+  //   double locationLongitude,
+  // ) {
+  //   print(userLatitude);
+  //   print(userLongitude);
+  //   double distance = Geolocator.distanceBetween(
+  //     userLatitude,
+  //     userLongitude,
+  //     locationLatitude,
+  //     locationLongitude,
+  //   );
+  //   return distance;
+  // }
   double calculateDistance(double latitude, double longitude) {
     double distance = Geolocator.distanceBetween(
       27.67183690973489,
@@ -81,11 +116,9 @@ class LocationScreen {
   List<FilteredLocation> filterLocationsByRadius(
       List<FilteredLocation> allLocations, double radius) {
     List<FilteredLocation> filteredLocations = [];
-    searchRadius = radius;
 
     for (var location in allLocations) {
-      print('new raiud: $searchRadius');
-      if (location.distance <= searchRadius) {
+      if (location.distance <= radius) {
         filteredLocations.add(location);
       }
     }

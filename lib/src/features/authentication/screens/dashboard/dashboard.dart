@@ -41,7 +41,7 @@ class _DashboardState extends State<Dashboard> {
 
   void fetchRecommendations() async {
     // if (title == 'temple') {
-    var url = 'http://192.168.1.65:5000/predict';
+    var url = 'http://192.168.34.137:5000/predict';
     var body = jsonEncode({'user_id': currentuser});
 
     var response = await http.post(
@@ -87,7 +87,7 @@ class _DashboardState extends State<Dashboard> {
     settemples();
     setAllEvents();
     currentuser = FirebaseAuth.instance.currentUser!.uid;
-    // fetchRecommendations();
+    fetchRecommendations();
     // fetchRecommendedRestaurants();
     //title = widget.placeInfo.title;
   }
@@ -204,7 +204,7 @@ class _DashboardState extends State<Dashboard> {
 
 // Defining a function to search in the MySQL database
   Future<List<PlaceInfo>> searchInDatabase(String query) async {
-    final apiUrl = 'https://192.168.1.65/api/search.php';
+    final apiUrl = 'https://192.168.34.137/api/search.php';
 
     HttpClient httpClient = HttpClient()
       ..badCertificateCallback =
@@ -311,7 +311,7 @@ class _DashboardState extends State<Dashboard> {
                               fontSize: 18),
                           children: [
                         TextSpan(
-                            text: ", Alexa",
+                            text: ", Balen",
                             style: TextStyle(
                                 color: isDark ? tWhiteClr : tDarkClr,
                                 fontWeight: FontWeight.bold,

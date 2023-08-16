@@ -21,8 +21,8 @@ class _DetailScreenState extends State<DetailScreen> {
   List<bool> starStatus = [false, false, false, false, false];
   TextEditingController _commentController = TextEditingController();
 
-  final String apiUrl1 = "http:// 172.20.10.2/api/insert_TempleRatings.php";
-  final String Url = "http:// 172.20.10.2/api/insert_fav.php";
+  final String apiUrl1 = "http://192.168.34.137/api/insert_TempleRatings.php";
+  final String Url = "http://192.168.34.137/api/insert_fav.php";
 
   late int templeid;
   late String Username;
@@ -36,7 +36,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   void fetchRecommendations() async {
     // if (title == 'temple') {
-    var url = 'http:// 172.20.10.2:5000/predict';
+    var url = 'http://192.168.34.137:5000/predict';
     var body = jsonEncode({'user_id': currentuser});
 
     var response = await http.post(
@@ -80,7 +80,7 @@ class _DetailScreenState extends State<DetailScreen> {
     final String uid = currentuser;
 
     final response = await http
-        .post(Uri.parse("http:// 172.20.10.2/api/show_favTemple.php"), body: {
+        .post(Uri.parse("http://192.168.34.137/api/show_favTemple.php"), body: {
       'templeid': templeid.toString(),
       'uid': uid.toString(),
     });
@@ -103,7 +103,7 @@ class _DetailScreenState extends State<DetailScreen> {
     print(comment);
     final String uiid = currentuser;
     final response = await http.post(
-        Uri.parse("http:// 172.20.10.2/api/insert_rating.php?title=$title"),
+        Uri.parse("http://192.168.34.137/api/insert_rating.php?title=$title"),
         body: {
           'rating': rating.toString(),
           'templeid': templeid.toString(),
@@ -124,7 +124,7 @@ class _DetailScreenState extends State<DetailScreen> {
     print('this');
     final String uiid = currentuser;
     final response = await http.post(
-        Uri.parse("http:// 172.20.10.2/api/insert_fav.php?title=$title"),
+        Uri.parse("http://192.168.34.137/api/insert_fav.php?title=$title"),
         body: {
           'uid': uiid.toString(),
           'templeid': templeid.toString(),
@@ -145,7 +145,7 @@ class _DetailScreenState extends State<DetailScreen> {
     final String uid = currentuser;
 
     final response = await http.post(
-      Uri.parse("http:// 172.20.10.2/api/remove_fav.php"),
+      Uri.parse("http://192.168.34.137/api/remove_fav.php"),
       body: {
         'templeid': templeid.toString(),
         'uid': uid,

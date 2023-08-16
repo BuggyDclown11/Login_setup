@@ -44,6 +44,9 @@ class _PositionDifference1State extends State<PositionDifference1> {
   final double y1 = 85.42903234436557;
   final double containerSizeX;
   final double containerSizeY;
+
+  bool _screenDismissed = false;
+
   Offset? middlePoint;
   List<Offset> secondPoint = [];
   static List<position> positions = [];
@@ -61,15 +64,17 @@ class _PositionDifference1State extends State<PositionDifference1> {
   void initState() {
     double containermidX;
     double containermidY;
+
     super.initState();
-    setlocation();
+    setlocation(radiusValue);
     containermidX = containerSizeX / 2;
     containermidY = containerSizeY / 2;
     middlePoint = Offset(containermidX, containermidY);
   }
 
-  void setlocation() async {
+  void setlocation(double radius) async {
     LocationScreen location = LocationScreen(title: selectedTitle);
+    radiusValue = radius; // Set the radiusValue
     await location.fetchLocationsFromAPI(radiusValue);
     List<FilteredLocation> loca = location.returnfilteredLocations();
     setState(() {
@@ -285,73 +290,77 @@ class _PositionDifference1State extends State<PositionDifference1> {
     return SafeArea(
       child: Stack(
         children: [
-          Positioned(
-            top: 0,
-            left: 15,
-            right: 15,
-            child: Dismissible(
-              key: Key('dismissKey'),
-              direction: DismissDirection.down,
-              onDismissed: (direction) {
-                setState(() {
-                  radiusSlider = false;
-                  radiusValue = 100.0;
-                });
-              },
-              child: Container(
-                height: 50.0,
-                color: Colors.black.withOpacity(0.2),
-                child: Center(
-                  child: Text(
-                    "Nearby location upto 100",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+          Container(
+            alignment: Alignment.topCenter,
+            padding: EdgeInsets.symmetric(horizontal: 15.0),
+            child: Positioned(
+              top: 00,
+              left: 15,
+              right: 15,
+              child: Dismissible(
+                key: Key('dismissKey'),
+                direction: DismissDirection.down,
+                onDismissed: (direction) {
+                  setState(() {
+                    radiusSlider = false;
+                    radiusValue = radiusValue;
+                  });
+                },
+                child: Container(
+                  height: 50.0,
+                  color: Colors.black.withOpacity(0.2),
+                  child: Center(
+                    child: Text(
+                      "Nearby location upto ${radiusValue.round()} m",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-          // Positioned(
-          //   top: 30, // Adjust the position as needed
-          //   left: 15,
-          //   right: 15,
-          //   child: radiusSlider
-          //       ? Container(
-          //           height: 50.0,
-          //           color: Colors.black.withOpacity(0.2),
-          //           child: Row(
-          //             children: [
-          //               Expanded(
-          //                 child: Slider(
-          //                   max: 400.0,
-          //                   min: 100.0,
-          //                   value: radiusValue,
-          //                   onChanged: (newVal) {
-          //                     setState(() {
-          //                       radiusValue = newVal;
-          //                       print(
-          //                           'radius: $radiusValue'); // Update the state value
-          //                     });
-          //                   },
-          //                 ),
-          //               ),
-          //               IconButton(
-          //                 onPressed: () {
-          //                   setState(() {
-          //                     radiusSlider = false;
-          //                     radiusValue = 300.0;
-          //                   });
-          //                 },
-          //                 icon: Icon(Icons.close, color: Colors.red),
-          //               ),
-          //             ],
-          //           ),
-          //         )
-          //       : Container(),
-          // ),
+          Positioned(
+            top: 00, // Adjust the position as needed
+            left: 15,
+            right: 15,
+            child: radiusSlider
+                ? Container(
+                    height: 50.0,
+                    color: Colors.black.withOpacity(0.2),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Slider(
+                            max: 800.0,
+                            min: 100.0,
+                            value: radiusValue,
+                            onChanged: (newVal) {
+                              setState(() {
+                                radiusValue = newVal;
+                                // Update the state value
+                              });
+                              setlocation(radiusValue);
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              radiusSlider = false;
+                              radiusValue = 300.0;
+                            });
+                          },
+                          icon: Icon(Icons.close, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(),
+          ),
           Positioned(
             left: middlePoint!.dx - 135,
             top: middlePoint!.dy - 16,

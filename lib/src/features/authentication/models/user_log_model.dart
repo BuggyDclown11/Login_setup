@@ -30,7 +30,7 @@ class UserLogService {
   Future<List<UserLog>> getUserLog() async {
     List<UserLog> userLog = [];
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    final String url = 'http:// 172.20.10.2/api/show_user_log.php';
+    final String url = 'http://192.168.34.137/api/show_user_log.php';
 
     var response = await http.post(Uri.parse(url), body: {'uid': uid});
     if (response.statusCode == 200) {

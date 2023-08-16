@@ -37,7 +37,7 @@ class PlacesService {
   // List<PlaceInfo> places = [];
   Future<List<PlaceInfo>> getTemples() async {
     List<PlaceInfo> temples = [];
-    final String url = 'http:// 172.20.10.2/api/show_temple.php';
+    final String url = 'http://192.168.34.137/api/show_temple.php';
 
     var response = await http.get(Uri.parse(url));
     var results = jsonDecode(response.body);
@@ -52,7 +52,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getPonds() async {
     List<PlaceInfo> ponds = [];
-    final String url = 'http:// 172.20.10.2/api/show_ponds.php';
+    final String url = 'http://192.168.34.137/api/show_ponds.php';
 
     var response = await http.get(Uri.parse(url));
     var results1 = jsonDecode(response.body);
@@ -67,7 +67,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getchowks() async {
     List<PlaceInfo> chowks = [];
-    final String url = 'http:// 172.20.10.2/api/show_chowks.php';
+    final String url = 'http://192.168.34.137/api/show_chowks.php';
 
     var response = await http.get(Uri.parse(url));
     var results = jsonDecode(response.body);
@@ -82,7 +82,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getmeseums() async {
     List<PlaceInfo> meseums = [];
-    final String url = 'http:// 172.20.10.2/api/show_meseum.php';
+    final String url = 'http://192.168.34.137/api/show_meseum.php';
 
     var response = await http.get(Uri.parse(url));
     var results2 = jsonDecode(response.body);
@@ -97,7 +97,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getstatues() async {
     List<PlaceInfo> statues = [];
-    final String url = 'http:// 172.20.10.2/api/show_statue.php';
+    final String url = 'http://192.168.34.137/api/show_statue.php';
 
     var response = await http.get(Uri.parse(url));
     var results1 = jsonDecode(response.body);
@@ -112,7 +112,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getAllEvents() async {
     List<PlaceInfo> events = [];
-    final String url = 'http:// 172.20.10.2/api/show_event.php';
+    final String url = 'http://192.168.34.137/api/show_event.php';
 
     var response = await http.get(Uri.parse(url));
     var results = jsonDecode(response.body);
@@ -128,7 +128,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getUpcomingEvents() async {
     List<PlaceInfo> upcomingEvents = [];
-    final String url = 'http:// 172.20.10.2/api/show_upcoming_events.php';
+    final String url = 'http://192.168.34.137/api/show_upcoming_events.php';
 
     var response = await http.get(Uri.parse(url));
     var results = jsonDecode(response.body);
@@ -142,10 +142,9 @@ class PlacesService {
     return upcomingEvents;
   }
 
-
   Future<List<PlaceInfo>> getFavTempleDetails(String uid) async {
     final response = await http.post(
-      Uri.parse("http:// 172.20.10.2/api/show_userFav.php"),
+      Uri.parse("http://192.168.34.137/api/show_userFav.php"),
       body: {
         'uid': uid,
       },
@@ -174,7 +173,7 @@ class PlacesService {
   }
 
   Future<PlaceInfo?> getTempleDetailsById(int templeId) async {
-    final String url = 'http:// 172.20.10.2/api/show_fav_by_id.php';
+    final String url = 'http://192.168.34.137/api/show_fav_by_id.php';
     var response = await http.post(Uri.parse(url), body: {
       'templeId': templeId.toString(),
     });
