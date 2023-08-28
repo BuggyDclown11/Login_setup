@@ -6,6 +6,7 @@ import 'package:login_setup/src/common_widgets/cards/category_card.dart';
 import 'package:login_setup/src/common_widgets/cards/recommended_card.dart';
 import 'package:login_setup/src/common_widgets/cards/recommened/recommended_for_event.dart';
 import 'package:login_setup/src/constants/colors.dart';
+import 'package:login_setup/src/constants/constants.dart';
 import 'package:login_setup/src/features/authentication/models/place_modal.dart';
 import 'package:login_setup/src/features/authentication/screens/Scanner/scanner.dart';
 import 'package:login_setup/src/features/authentication/screens/dashboard/widgets/NavButton.dart';
@@ -41,7 +42,7 @@ class _DashboardState extends State<Dashboard> {
 
   void fetchRecommendations() async {
     // if (title == 'temple') {
-    var url = 'http://192.168.34.137:5000/predict';
+    var url = 'http://192.168.170.137:5000/predict';
     var body = jsonEncode({'user_id': currentuser});
 
     var response = await http.post(
@@ -54,7 +55,9 @@ class _DashboardState extends State<Dashboard> {
       var data = jsonDecode(response.body);
       print('Recommendations data: $data');
 
-      List<int> recommendationIds = List<int>.from(data);
+      List<int> recommendationIds =
+          List<int>.from(data['Recommended Temple IDs']);
+
       print('Number of recommendations: ${recommendationIds.length}');
 
       List<PlaceInfo> recommendedTemples = [];
@@ -90,60 +93,6 @@ class _DashboardState extends State<Dashboard> {
     fetchRecommendations();
     // fetchRecommendedRestaurants();
     //title = widget.placeInfo.title;
-  }
-
-  void fetchRecommendedRestaurants() async {
-    try {
-      List<PlaceInfo> restaurants = await getRestaurantsInBhaktapur();
-      setState(() {
-        recommendedRestaurants = restaurants;
-      });
-    } catch (e) {
-      print('Error fetching recommended restaurants: $e');
-    }
-  }
-
-  Future<List<PlaceInfo>> getRestaurantsInBhaktapur() async {
-    final apiKey = "AIzaSyCxWUj8p1mc6ctC6BcPHAb6sPYpichInyU";
-    double latitude = 27.6726; // Replace with the user's latitude
-    double longitude = 85.4285; // Replace with the user's longitude
-    final radius = 5000; // Radius in meters (adjust as needed)
-    final type = "restaurant"; // Type of place (restaurant in this case)
-
-    var response = await http.get(Uri.parse(
-        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=$type&key=$apiKey'));
-
-    if (response.statusCode == 200) {
-      List<PlaceInfo> restaurants = parseRestaurantData(response.body);
-      return restaurants;
-    } else {
-      throw Exception('Failed to fetch restaurants from the API.');
-    }
-  }
-
-  List<PlaceInfo> parseRestaurantData(String responseBody) {
-    List<dynamic> data = jsonDecode(responseBody);
-    List<PlaceInfo> restaurants = [];
-
-    for (var item in data) {
-      PlaceInfo restaurant = PlaceInfo(
-        id: item['id'],
-        name: item['name'],
-        address: item['vicinity'],
-        city: '', // Add city field if available in the API response
-        imageUrl: '', // Set the imageUrl with the constructed URL
-        desc: '', // Add desc field if available in the API response
-        title: '', // Add title field if available in the API response
-        latitude: item['geometry']['location']['lat'].toString(),
-        longitude: item['geometry']['location']['lng'].toString(),
-      );
-
-      print(restaurant.name);
-
-      restaurants.add(restaurant);
-    }
-
-    return restaurants;
   }
 
   void settemples() async {
@@ -204,7 +153,7 @@ class _DashboardState extends State<Dashboard> {
 
 // Defining a function to search in the MySQL database
   Future<List<PlaceInfo>> searchInDatabase(String query) async {
-    final apiUrl = 'https://192.168.34.137/api/search.php';
+    final apiUrl = ApiString.showSearchResult;
 
     HttpClient httpClient = HttpClient()
       ..badCertificateCallback =

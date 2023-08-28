@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:login_setup/src/constants/constants.dart';
 import 'package:login_setup/src/features/authentication/models/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -40,7 +41,7 @@ class UserRepository extends GetxController {
   }
 
   Future<void> _saveUserDataLocally(UserModel user, String userId) async {
-    final url = 'http://192.168.1.65/api/insert-into-db.php';
+    final url = ApiString.insertIntoDB;
 
     try {
       final response = await http.post(

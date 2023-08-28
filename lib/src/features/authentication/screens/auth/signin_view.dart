@@ -39,7 +39,7 @@ class _SignInViewState extends State<SignInView> {
                 Text('Let’s Sign you in', style: AppTypography.kBold24),
                 SizedBox(height: AppSpacing.fiveVertical),
                 Text(
-                  'Lorem ipsum dolor sit amet, consectetur',
+                  ' ',
                   style: AppTypography.kMedium14.copyWith(
                     color: AppColors.kGrey60,
                   ),

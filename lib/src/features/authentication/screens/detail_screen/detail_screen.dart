@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:login_setup/src/constants/constants.dart';
 
 import 'package:login_setup/src/features/authentication/screens/dummy_dash/dash.dart';
 
@@ -21,8 +22,8 @@ class _DetailScreenState extends State<DetailScreen> {
   List<bool> starStatus = [false, false, false, false, false];
   TextEditingController _commentController = TextEditingController();
 
-  final String apiUrl1 = "http://192.168.34.137/api/insert_TempleRatings.php";
-  final String Url = "http://192.168.34.137/api/insert_fav.php";
+  final String apiUrl1 = ApiString.insertPlaceRating;
+  final String Url = ApiString.insertFavorite;
 
   late int templeid;
   late String Username;
@@ -36,7 +37,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   void fetchRecommendations() async {
     // if (title == 'temple') {
-    var url = 'http://192.168.34.137:5000/predict';
+    var url = 'http://192.168.170.137:5000/predict';
     var body = jsonEncode({'user_id': currentuser});
 
     var response = await http.post(
@@ -49,7 +50,8 @@ class _DetailScreenState extends State<DetailScreen> {
       var data = jsonDecode(response.body);
       print('Recommendations data: $data');
 
-      List<int> recommendationIds = List<int>.from(data);
+      List<int> recommendationIds =
+          List<int>.from(data['Recommended Temple IDs']);
       print('Number of recommendations: ${recommendationIds.length}');
 
       List<PlaceInfo> recommendedTemples = [];
@@ -79,8 +81,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Future<void> checkFavoriteStatus() async {
     final String uid = currentuser;
 
-    final response = await http
-        .post(Uri.parse("http://192.168.34.137/api/show_favTemple.php"), body: {
+    final response = await http.post(Uri.parse(ApiString.showFavorite), body: {
       'templeid': templeid.toString(),
       'uid': uid.toString(),
     });
@@ -102,14 +103,13 @@ class _DetailScreenState extends State<DetailScreen> {
     print('ratinf');
     print(comment);
     final String uiid = currentuser;
-    final response = await http.post(
-        Uri.parse("http://192.168.34.137/api/insert_rating.php?title=$title"),
-        body: {
-          'rating': rating.toString(),
-          'templeid': templeid.toString(),
-          'uid': uiid.toString(),
-          'comment': comment,
-        });
+    final response = await http
+        .post(Uri.parse("${ApiString.insertPlaceRating}?title=$title"), body: {
+      'rating': rating.toString(),
+      'templeid': templeid.toString(),
+      'uid': uiid.toString(),
+      'comment': comment,
+    });
 
     if (response.statusCode == 200) {
       // Successful insertion
@@ -123,12 +123,11 @@ class _DetailScreenState extends State<DetailScreen> {
   void _insertFavourite() async {
     print('this');
     final String uiid = currentuser;
-    final response = await http.post(
-        Uri.parse("http://192.168.34.137/api/insert_fav.php?title=$title"),
-        body: {
-          'uid': uiid.toString(),
-          'templeid': templeid.toString(),
-        });
+    final response = await http
+        .post(Uri.parse("${ApiString.insertFavorite}?title=$title"), body: {
+      'uid': uiid.toString(),
+      'templeid': templeid.toString(),
+    });
     if (response.statusCode == 200) {
       // Successful insertion
       print('favtemple inserted successfully!');
@@ -145,7 +144,7 @@ class _DetailScreenState extends State<DetailScreen> {
     final String uid = currentuser;
 
     final response = await http.post(
-      Uri.parse("http://192.168.34.137/api/remove_fav.php"),
+      Uri.parse("http://192.168.1.66/api/remove_fav.php"),
       body: {
         'templeid': templeid.toString(),
         'uid': uid,
@@ -384,7 +383,6 @@ class _DetailScreenState extends State<DetailScreen> {
                               height: 10,
                             ),
                             SizedBox(height: 20),
-                           
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -495,7 +493,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             Row(
                               children: [
                                 Text(
-                                  "Recommendation",
+                                  "Places you may like",
                                   style: txtTheme.headlineSmall,
                                 ),
                               ],

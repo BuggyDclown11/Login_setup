@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
 
+import '../../../../constants/constants.dart';
 import '../../models/place_modal.dart';
 
 class FilteredLocation {
@@ -48,7 +49,42 @@ class LocationScreen {
     print(userLongitude);
 
     if (title == 'temple') {
-      url = 'http://192.168.34.137/api/show_temple.php';
+      url = ApiString.showTemple;
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        print('got data');
+
+        List<FilteredLocation> fetchedLocations = data.map((item) {
+          return FilteredLocation(
+            latitude: double.parse(item['Latitude']),
+            longitude: double.parse(item['Longitude']),
+            // distance: calculateDistance(
+            //   userLatitude,
+            //   userLongitude,
+            //   double.parse(item['Latitude']),
+            //   double.parse(item['Longitude']),
+            // ),
+            distance: calculateDistance(double.parse(item['Latitude']),
+                double.parse(item['Longitude'])),
+            name: item['Name'],
+            imgurl: item['ImageURL'],
+            title: '',
+          );
+        }).toList();
+
+        // Update the value of radius before filtering the locations
+        this.radiusValue = radius;
+
+        List<FilteredLocation> filteredLocations =
+            await filterLocationsByRadius(fetchedLocations, radius);
+
+        setlist(filteredLocations);
+        //print(filteredLocations);
+      }
+    } else if (title == 'statue') {
+      url = ApiString.showChwoks;
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:login_setup/src/constants/constants.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
@@ -78,8 +79,8 @@ class _ScannerState extends State<Scanner> {
       String uid = currentuser;
       String locName = locationName;
 
-      final response = await http
-          .post(Uri.parse("http://172.20.10.2/api/insert_user_log.php"), body: {
+      final response =
+          await http.post(Uri.parse(ApiString.insertUserLog), body: {
         'latitude': latitude.toString(),
         'uid': uid.toString(),
         'longitude': longitude.toString(),

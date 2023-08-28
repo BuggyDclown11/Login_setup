@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:login_setup/src/constants/constants.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 import 'package:login_setup/src/constants/colors.dart';
@@ -29,7 +29,7 @@ class Dash extends StatefulWidget {
 }
 
 class _DashState extends State<Dash> {
-  final String apiKey = "AIzaSyCxWUj8p1mc6ctC6BcPHAb6sPYpichInyU";
+  final String apiKey = ApiString.ApiKey;
   final controller = Get.put(ProfileController());
 
   List<dynamic> data = [];
@@ -555,7 +555,7 @@ class _DashState extends State<Dash> {
         ),
         child: GooglePlaceAutoCompleteTextField(
           textEditingController: controller,
-          googleAPIKey: "AIzaSyCxWUj8p1mc6ctC6BcPHAb6sPYpichInyU",
+          googleAPIKey: ApiString.ApiKey,
           inputDecoration: InputDecoration(
             hintStyle: TextStyle(
               color: isDark ? tCardBgClr : tDarkClr,

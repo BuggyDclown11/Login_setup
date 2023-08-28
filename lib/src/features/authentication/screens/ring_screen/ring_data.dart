@@ -82,9 +82,9 @@ class _RingsPageState extends State<RingsPage> {
           IconButton(
             onPressed: () {
               setState(() {
-                Title = 'pond';
+                Title = 'statue';
               });
-              handleIconPress('pond');
+              handleIconPress('statue');
               print('title: $Title');
             },
             icon: Icon(Icons.search),

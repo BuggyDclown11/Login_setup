@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:login_setup/src/constants/constants.dart';
+
 class UserLog {
   final String time, locName, latitude, longitude;
   final int id;
@@ -30,7 +32,7 @@ class UserLogService {
   Future<List<UserLog>> getUserLog() async {
     List<UserLog> userLog = [];
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    final String url = 'http://192.168.34.137/api/show_user_log.php';
+    final String url = ApiString.showUserLog;
 
     var response = await http.post(Uri.parse(url), body: {'uid': uid});
     if (response.statusCode == 200) {

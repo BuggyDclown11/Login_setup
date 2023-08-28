@@ -1,6 +1,8 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../../constants/constants.dart';
+
 class PlaceInfo {
   final String imageUrl, name, desc, address, city, title, latitude, longitude;
   final int id;
@@ -37,7 +39,7 @@ class PlacesService {
   // List<PlaceInfo> places = [];
   Future<List<PlaceInfo>> getTemples() async {
     List<PlaceInfo> temples = [];
-    final String url = 'http://192.168.34.137/api/show_temple.php';
+    final String url = ApiString.showTemple;
 
     var response = await http.get(Uri.parse(url));
     var results = jsonDecode(response.body);
@@ -52,7 +54,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getPonds() async {
     List<PlaceInfo> ponds = [];
-    final String url = 'http://192.168.34.137/api/show_ponds.php';
+    final String url = ApiString.showPond;
 
     var response = await http.get(Uri.parse(url));
     var results1 = jsonDecode(response.body);
@@ -67,7 +69,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getchowks() async {
     List<PlaceInfo> chowks = [];
-    final String url = 'http://192.168.34.137/api/show_chowks.php';
+    final String url = ApiString.showChwoks;
 
     var response = await http.get(Uri.parse(url));
     var results = jsonDecode(response.body);
@@ -82,7 +84,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getmeseums() async {
     List<PlaceInfo> meseums = [];
-    final String url = 'http://192.168.34.137/api/show_meseum.php';
+    final String url = ApiString.showMueseum;
 
     var response = await http.get(Uri.parse(url));
     var results2 = jsonDecode(response.body);
@@ -97,7 +99,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getstatues() async {
     List<PlaceInfo> statues = [];
-    final String url = 'http://192.168.34.137/api/show_statue.php';
+    final String url = ApiString.showStatue;
 
     var response = await http.get(Uri.parse(url));
     var results1 = jsonDecode(response.body);
@@ -112,7 +114,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getAllEvents() async {
     List<PlaceInfo> events = [];
-    final String url = 'http://192.168.34.137/api/show_event.php';
+    final String url = ApiString.showEvents;
 
     var response = await http.get(Uri.parse(url));
     var results = jsonDecode(response.body);
@@ -128,7 +130,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getUpcomingEvents() async {
     List<PlaceInfo> upcomingEvents = [];
-    final String url = 'http://192.168.34.137/api/show_upcoming_events.php';
+    final String url = ApiString.showUpcomingEvents;
 
     var response = await http.get(Uri.parse(url));
     var results = jsonDecode(response.body);
@@ -144,7 +146,7 @@ class PlacesService {
 
   Future<List<PlaceInfo>> getFavTempleDetails(String uid) async {
     final response = await http.post(
-      Uri.parse("http://192.168.34.137/api/show_userFav.php"),
+      Uri.parse("http://192.168.1.66/api/show_userFav.php"),
       body: {
         'uid': uid,
       },
@@ -173,7 +175,7 @@ class PlacesService {
   }
 
   Future<PlaceInfo?> getTempleDetailsById(int templeId) async {
-    final String url = 'http://192.168.34.137/api/show_fav_by_id.php';
+    final String url = 'http://192.168.1.66/api/show_fav_by_id.php';
     var response = await http.post(Uri.parse(url), body: {
       'templeId': templeId.toString(),
     });

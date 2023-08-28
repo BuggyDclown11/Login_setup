@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:login_setup/src/constants/constants.dart';
 
 import '../../../../constants/colors.dart';
 import '../../models/place_modal.dart';
@@ -17,8 +18,8 @@ class _DetailForEventState extends State<DetailForEvent> {
   List<bool> starStatus = [false, false, false, false, false];
   TextEditingController _commentController = TextEditingController();
 
-  final String apiUrl1 = "http://192.168.34.137/api/insert_TempleRatings.php";
-  final String Url = "http://192.168.34.137/api/insert_fav.php";
+  final String apiUrl1 = ApiString.insertPlaceRating;
+  final String Url = ApiString.removeFavorite;
 
   late int templeid;
   late String Username;
@@ -34,7 +35,7 @@ class _DetailForEventState extends State<DetailForEvent> {
     // Perform the necessary check to determine if the place is in favorites
     final String uiid = currentuser;
     final response = await http.get(Uri.parse(
-        "http://192.168.34.137/api/insert_fav.php?uid=$uiid&templeid=$templeid"));
+        "${ApiString.showFavorite}?uid=$uiid&templeid=$templeid"));
 
     if (response.statusCode == 200) {
       // Check if the response indicates that the place is in favorites
@@ -52,14 +53,13 @@ class _DetailForEventState extends State<DetailForEvent> {
     print('ratinf');
     print(comment);
     final String uiid = currentuser;
-    final response = await http.post(
-        Uri.parse("http://192.168.34.137/api/insert_rating.php?title=$title"),
-        body: {
-          'rating': rating.toString(),
-          'templeid': templeid.toString(),
-          'uid': uiid.toString(),
-          'comment': comment,
-        });
+    final response = await http
+        .post(Uri.parse("${ApiString.insertPlaceRating}?title=$title"), body: {
+      'rating': rating.toString(),
+      'templeid': templeid.toString(),
+      'uid': uiid.toString(),
+      'comment': comment,
+    });
 
     if (response.statusCode == 200) {
       // Successful insertion
@@ -74,7 +74,7 @@ class _DetailForEventState extends State<DetailForEvent> {
     print('this');
     final String uiid = currentuser;
     final response = await http.post(
-        Uri.parse("http://192.168.34.137/api/insert_fav.php?title=$title"),
+        Uri.parse("${ApiString.insertFavorite}?title=$title"),
         body: {
           'uid': uiid.toString(),
           'templeid': templeid.toString(),
